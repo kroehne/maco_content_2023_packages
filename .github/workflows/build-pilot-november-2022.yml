@@ -55,7 +55,7 @@ jobs:
           git clone --branch develop https://ukroehne:ATBBzUC2KPqFUnLGqJymY4QranuUB6F96EB9@bitbucket.org/software-driven/dipf-alea-content.git content
       - name: Overwrite content
         run: |      
-         cp -p output/ content/         
+         cp -r output/ content/         
       - name: Commit and push
         run: |
           cd content
