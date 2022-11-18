@@ -22,7 +22,7 @@ jobs:
          mkdir -p maco_content_2023/items/cover
          cp maco_content_2023/cover/*.zip maco_content_2023/items/cover   
          mkdir -p maco_content_2023/runtimes
-         cp maco_content_2023_runtimes/9.8.0 maco_content_2023/runtimes
+         cp -r maco_content_2023_runtimes/9.8.0 maco_content_2023/runtimes
          mkdir -p output/desktop_data
          mkdir -p output/player_content
          ls -R
