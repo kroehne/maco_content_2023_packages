@@ -25,6 +25,8 @@ jobs:
          mkdir -p maco_content_2023/runtimes
          cp -r maco_content_2023_runtimes/9.8.0 maco_content_2023/runtimes
          mkdir -p output/ 
+         mkdir -p output/materials 
+         cp -r maco_content_2023/materials output/materials
          mkdir docs
          ls -R
       - name: Checkout Alea / Testapp 
