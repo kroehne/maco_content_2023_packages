@@ -55,11 +55,11 @@ jobs:
           git clone --branch develop https://ukroehne:ATBBzUC2KPqFUnLGqJymY4QranuUB6F96EB9@bitbucket.org/software-driven/dipf-alea-content.git content
       - name: Overwrite content
         run: |      
-         mkdir -p output/ content/
-         ls -R
+         cp -p output/ content/         
       - name: Commit and push
         run: |
           cd content
+          ls -R
           git config --global user.name 'Worker on maco_content_2023_packages'
           git config --global user.email 'your-username@users.noreply.github.com'          
           git add -A 
