@@ -52,8 +52,14 @@ jobs:
           folder: docs/ 
       - name: Checkout Content 
         run: |
-          git clone --branch pilot-november-2022 https://ukroehne:ATBBzUC2KPqFUnLGqJymY4QranuUB6F96EB9@bitbucket.org/software-driven/dipf-alea-content.git content
+          git clone --branch develop https://ukroehne:ATBBzUC2KPqFUnLGqJymY4QranuUB6F96EB9@bitbucket.org/software-driven/dipf-alea-content.git content
       - name: Overwrite content
         run: |      
          mkdir -p output/ content/
          ls -R
+      - name: Commit and push
+        run: |
+          cd content
+          git add -A 
+          git commit -am "Automated report"
+          git push
