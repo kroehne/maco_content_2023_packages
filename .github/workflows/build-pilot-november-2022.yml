@@ -4,27 +4,27 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:    
-      - name: Checkout Alea / Testapp 
-        run: |
-          git clone --branch develop https://ukroehne:ATBBzUC2KPqFUnLGqJymY4QranuUB6F96EB9@bitbucket.org/software-driven/dipf-alea.git
-          git clone --branch develop https://ukroehne:ATBBzUC2KPqFUnLGqJymY4QranuUB6F96EB9@bitbucket.org/software-driven/dipf-testapp.git 
       - name: Checkout runtimes
         uses: actions/checkout@v3
         with:
           repository: kroehne/maco_content_2023_runtimes    
-          token: ${{ secrets.PAT_MACO_CONTENT_2023_RUNTIMES}}  
+          token: ${{ secrets.MACO_CONTENT_CHECKOUT}}  
           path: maco_content_2023_runtimes
       - name: Checkout content in branch 'pilot-november-2022'
         uses: actions/checkout@v3
         with:
           repository: kroehne/maco_content_2023    
-          token: ${{ secrets.PAT_MACO_CONTENT_2023}}  
+          token: ${{ secrets.MACO_CONTENT_CHECKOUT}}  
           path: maco_content_2023
           ref: pilot-november-2022
       - name: Prepare folders
         run: |      
          mkdir -p maco_content_2023/items/cover
          cp maco_content_2023/cover/*.zip maco_content_2023/items/cover   
+      - name: Checkout Alea / Testapp 
+        run: |
+          git clone --branch develop https://ukroehne:ATBBzUC2KPqFUnLGqJymY4QranuUB6F96EB9@bitbucket.org/software-driven/dipf-alea.git
+          git clone --branch develop https://ukroehne:ATBBzUC2KPqFUnLGqJymY4QranuUB6F96EB9@bitbucket.org/software-driven/dipf-testapp.git          
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
