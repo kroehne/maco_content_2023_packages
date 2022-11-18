@@ -24,8 +24,7 @@ jobs:
          cp maco_content_2023/cover/*.zip maco_content_2023/items/cover   
          mkdir -p maco_content_2023/runtimes
          cp -r maco_content_2023_runtimes/9.8.0 maco_content_2023/runtimes
-         mkdir -p output/desktop_data
-         mkdir -p output/player_content
+         mkdir -p output/ 
          mkdir docs
          ls -R
       - name: Checkout Alea / Testapp 
@@ -41,7 +40,7 @@ jobs:
         run: |
           cd dipf-alea
           cd Alea.Prepare
-          dotnet run --project ./Alea.Prepare.csproj -- -w false -c ../../maco_content_2023/codebooks/ -d ../../output/desktop_data/ -i  ../../maco_content_2023/items/ -r ../../maco_content_2023/runtimes/ -s ../../output/player_content/ > "../../output/alea_preopare_log.txt"
+          dotnet run --project ./Alea.Prepare.csproj -- -w false -c ../../maco_content_2023/codebooks/ -d ../../output/ -i  ../../maco_content_2023/items/ -r ../../maco_content_2023/runtimes/ -s ../../output/ > "../../output/alea_preopare_log.txt"
           cd ..
           cd ..
       - name: Create output zip
