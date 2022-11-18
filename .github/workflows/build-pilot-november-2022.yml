@@ -21,6 +21,11 @@ jobs:
         run: |      
          mkdir -p maco_content_2023/items/cover
          cp maco_content_2023/cover/*.zip maco_content_2023/items/cover   
+         mkdir -p maco_content_2023/runtimes
+         cp maco_content_2023_runtimes/9.8.0 maco_content_2023/runtimes
+         mkdir -p output/desktop_data
+         mkdir -p output/player_content
+         ls -R
       - name: Checkout Alea / Testapp 
         run: |
           git clone --branch develop https://ukroehne:ATBBzUC2KPqFUnLGqJymY4QranuUB6F96EB9@bitbucket.org/software-driven/dipf-alea.git
@@ -29,4 +34,9 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.0.x
-          dotnet-quality: 'preview'      
+          dotnet-quality: 'preview'     
+      - name: Build output
+        run: |
+          cd dipf-alea
+          cd Alea.Prepare
+          dotnet run --project ./Alea.Prepare.csproj -- -w false -c ../../maco_content_2023/codebooks/ -d ../../output/desktop_data/ -i  ../../maco_content_2023/items/ -r ../../maco_content_2023/runtimes/ -s ../../output/player_content/ > "../../output/alea_preopare_log.txt"
