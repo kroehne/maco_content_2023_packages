@@ -4,6 +4,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:    
+      - uses: actions/checkout@v3
       - name: Checkout runtimes
         uses: actions/checkout@v3
         with:
@@ -43,7 +44,7 @@ jobs:
           dotnet run --project ./Alea.Prepare.csproj -- -w false -c ../../maco_content_2023/codebooks/ -d ../../output/desktop_data/ -i  ../../maco_content_2023/items/ -r ../../maco_content_2023/runtimes/ -s ../../output/player_content/ > "../../output/alea_preopare_log.txt"
           cd ..
           cd ..
-      - name: Creat output zip
+      - name: Create output zip
         run: zip -r -q docs/pilot-november-2022.zip output/ 
       - name: Deploy to gh-pages
         uses: JamesIves/github-pages-deploy-action@v4
