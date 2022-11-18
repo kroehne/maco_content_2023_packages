@@ -25,8 +25,7 @@ jobs:
          mkdir -p maco_content_2023/runtimes
          cp -r maco_content_2023_runtimes/9.8.0 maco_content_2023/runtimes
          mkdir -p output/ 
-         mkdir -p output/materials 
-         cp -r maco_content_2023/materials output/materials
+         cp -r maco_content_2023/materials output/
          mkdir docs
          ls -R
       - name: Checkout Alea / Testapp 
@@ -51,4 +50,10 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: docs/ 
-        
+      - name: Checkout Content 
+        run: |
+          git clone --branch pilot-november-2022 https://ukroehne:ATBBzUC2KPqFUnLGqJymY4QranuUB6F96EB9@bitbucket.org/software-driven/dipf-alea-content.git content
+      - name: Overwrite content
+        run: |      
+         mkdir -p output/ content/
+         ls -R
