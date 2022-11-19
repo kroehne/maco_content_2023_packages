@@ -63,10 +63,19 @@ jobs:
           dotnet run --project ./Alea.Prepare.csproj -- -w false -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_preopare_log.txt"
           cd ..
           cd ..
-          cd .. 
+          cd ..        
       - name: Overwrite content to create installer 
         run: | 
          rsync -avh output/ ./software-driven/dipf-alea/Installer/Content/ --delete --exclude=/.git
+      - name: Try to build 
+        run: |         
+          cd software-driven
+          cd dipf-alea
+          cd Alea.Desktop
+          publish -c Release -p:PublishProfile=Properties/PublishProfiles/FolderProfile.win-x64.pubxml
+          cd ..
+          cd ..
+          cd ..                  
       - name: Create installer package
         shell: bash
         env:
