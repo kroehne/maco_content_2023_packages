@@ -1,0 +1,74 @@
+name: Build  'pilot-january-2023'
+on: [workflow_dispatch]  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:    
+      - uses: actions/checkout@v3
+        with:
+           path: maco_content_2023_packages
+      - name: Checkout runtimes
+        uses: actions/checkout@v3
+        with:
+          repository: kroehne/maco_content_2023_runtimes    
+          token: ${{ secrets.MACO_CONTENT_CHECKOUT}}  
+          path: maco_content_2023_runtimes
+      - name: Checkout content in branch 'pilot-january-2023'
+        uses: actions/checkout@v3
+        with:
+          repository: kroehne/maco_content_2023    
+          token: ${{ secrets.MACO_CONTENT_CHECKOUT}}  
+          path: maco_content_2023
+          ref: pilot-january-2023
+      - name: Prepare folders
+        run: |      
+         mkdir -p maco_content_2023/items/cover
+         cp maco_content_2023/cover/*.zip maco_content_2023/items/cover   
+         mkdir -p maco_content_2023/runtimes
+         cp -r maco_content_2023_runtimes/9.8.0 maco_content_2023/runtimes
+         mkdir -p output/ 
+         cp -r maco_content_2023/materials output/
+         mkdir docs
+         mkdir software-driven
+         ls -R
+      - name: Checkout Alea / Testapp 
+        run: |
+          git clone --branch develop https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea.git software-driven/dipf-alea
+          git clone --branch develop https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-testapp.git software-driven/dipf-testapp
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+          dotnet-quality: 'preview'     
+      - name: Build output
+        run: |
+          cd software-driven
+          cd dipf-alea
+          cd Alea.Prepare
+          dotnet run --project ./Alea.Prepare.csproj -- -w false -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_preopare_log.txt"
+          cd ..
+          cd ..
+          cd .. 
+      - name: Create output zip
+        run: zip -r -q docs/pilot-january-2023.zip output/       
+      - name: Checkout Content 
+        run: |
+          git clone --branch pilot-january-2023 https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea-content.git content
+      - name: Overwrite content
+        run: | 
+         rsync -avh output/ content/ --delete --exclude=/.git
+      - name: Commit and push
+        run: |
+          cd content
+          ls -R
+          git config --global user.name 'Worker on maco_content_2023_packages'
+          git config --global user.email 'your-username@users.noreply.github.com'          
+          git add -A 
+          git commit -am "Automated content update"
+          git push
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+         
