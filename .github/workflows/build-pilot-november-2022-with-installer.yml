@@ -60,7 +60,6 @@ jobs:
           dotnet-version: 6.0.x
           dotnet-quality: 'preview'     
       - name: Build output
-        shell: bash
         run: |
           cd software-driven
           cd dipf-alea
