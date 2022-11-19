@@ -52,7 +52,7 @@ jobs:
           folder: docs/ 
       - name: Checkout Content 
         run: |
-          git clone --pilot-november-2022 develop https://ukroehne:ATBB5dMVueETL2TKbsfMwrJ9vXW255D5BE32@bitbucket.org/software-driven/dipf-alea-content.git content
+          git clone --branch pilot-november-2022 https://ukroehne:ATBB5dMVueETL2TKbsfMwrJ9vXW255D5BE32@bitbucket.org/software-driven/dipf-alea-content.git content
       - name: Overwrite content
         run: |      
          cp -r output/ content/         
