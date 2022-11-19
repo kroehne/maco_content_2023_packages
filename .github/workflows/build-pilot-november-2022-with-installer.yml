@@ -13,7 +13,7 @@ jobs:
       - name: Install the InstalBuilder
         shell: bash
         env:
-         IB_LICENSE: ${{ secrets.INSTALLER_LICENSE }}
+         IB_LICENSE: ${{ secrets.IB_LICENSE }}
         run: |
             curl -L ${{ env.INSTALLBUILDER_URL }} --output ib.exe
             ./ib.exe --mode unattended --prefix ${{ env.INSTALLBUILDER_DIR }}
@@ -76,7 +76,7 @@ jobs:
         run: |                     
             ${{ env.INSTALLBUILDER_DIR }}/bin/builder-cli.exe build ./software-driven/dipf-alea/Installer/AleaDesktop-Pilot.xml windows-x64 \
                 --license lic.xml \
-                --setvars project.outputDirectory=$(pwd) \
+                --setvars project.outputDirectory=$GITHUB_WORKSPACE/output/installer \
                 --setvars project.version=$PUBLIC_VERSION_NUMBER \
                 --setvars project.fullName="AleaDesktop (MSK-OC) -- Pilot November 2022" \
                 --setvars vendor="DIPF / erstellt durch Software Driven UG" 
