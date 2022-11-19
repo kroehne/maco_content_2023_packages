@@ -76,7 +76,7 @@ jobs:
         run: |                     
             ${{ env.INSTALLBUILDER_DIR }}/bin/builder-cli.exe build ./software-driven/dipf-alea/Installer/AleaDesktop-Pilot.xml windows-x64 \
                 --license lic.xml \
-                --setvars project.outputDirectory=${{ github.workspace }}\output\installer \
+                --setvars project.outputDirectory=\output\installer \
                 --setvars project.version=$PUBLIC_VERSION_NUMBER \
                 --setvars project.fullName="AleaDesktop (MSK-OC) -- Pilot November 2022" \
                 --setvars vendor="DIPF / erstellt durch Software Driven UG" 
