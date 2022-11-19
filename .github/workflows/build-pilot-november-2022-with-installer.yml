@@ -4,7 +4,7 @@ env:
     INSTALLBUILDER_DIR: ib/app
     INSTALLBUILDER_URL: https://installbuilder.com/installbuilder-professional-22.10.0-linux-x64-installer.run
 
-name: Build  'pilot-november-2022'
+name: Build  'pilot-november-2022 with Installer'
 on: [workflow_dispatch]  
 jobs:
   build:
@@ -66,14 +66,14 @@ jobs:
           cd .. 
       - name: Overwrite content to create installer 
         run: | 
-         rsync -avh output/ dipf-alea/Installer/Content/ --delete --exclude=/.git
+         rsync -avh output/ ./software-driven/dipf-alea/Installer/Content/ --delete --exclude=/.git
       - name: Create installer package
         shell: bash
         env:
          IB_LICENSE: ${{ secrets.INSTALLER_LICENSE }}
         run: |
             echo "$IB_LICENSE" > lic.xml
-            ${{ env.INSTALLBUILDER_DIR }}/bin/builder build ./dipf-alea/Installer/AleaDesktopWithoutPrepare.xml windows-x64 \
+            ${{ env.INSTALLBUILDER_DIR }}/bin/builder build ./dipf-alea/Installer/AleaDesktop-Pilot.xml windows-x64 \
                 --license lic.xml \
                 --setvars project.outputDirectory=$(pwd) \
                 --setvars project.version=$PUBLIC_VERSION_NUMBER \
