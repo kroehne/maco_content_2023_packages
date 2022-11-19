@@ -1,6 +1,6 @@
 env:
     PUBLIC_VERSION_NUMBER: '0.5'
-    PORTABLE_DIR: ${{ github.workspace }}/output/installer
+    PORTABLE_DIR: ${{ github.workspace }}\output\installer
     INSTALLBUILDER_DIR: ib/app
     INSTALLBUILDER_URL: https://installbuilder.com/installbuilder-professional-22.10.0-windows-installer.exe
 
@@ -76,10 +76,13 @@ jobs:
         run: |                     
             ${{ env.INSTALLBUILDER_DIR }}/bin/builder-cli.exe build ./software-driven/dipf-alea/Installer/AleaDesktop-Pilot.xml windows-x64 \
                 --license lic.xml \
-                --setvars project.outputDirectory=$GITHUB_WORKSPACE/output/installer \
+                --setvars project.outputDirectory=${{ github.workspace }}\output\installer \
                 --setvars project.version=$PUBLIC_VERSION_NUMBER \
                 --setvars project.fullName="AleaDesktop (MSK-OC) -- Pilot November 2022" \
                 --setvars vendor="DIPF / erstellt durch Software Driven UG" 
+      - name: Build output  
+        run: |
+          ls -R
       - name: Upload package artifact
         uses: actions/upload-artifact@v1
         with:
