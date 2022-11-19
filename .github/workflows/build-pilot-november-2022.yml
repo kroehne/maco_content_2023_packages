@@ -55,7 +55,7 @@ jobs:
           git clone --branch pilot-november-2022 https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea-content.git content
       - name: Overwrite content
         run: |      
-         cp -r output/ content/         
+         rsync -a output/ content/         
       - name: Commit and push
         run: |
           cd content
