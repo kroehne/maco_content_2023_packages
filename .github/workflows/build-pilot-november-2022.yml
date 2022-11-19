@@ -54,8 +54,8 @@ jobs:
         run: |
           git clone --branch pilot-november-2022 https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea-content.git content
       - name: Overwrite content
-        run: |      
-         rsync -a output/ content/         
+        run: | 
+         rsync -avh output/ content/ --delete
       - name: Commit and push
         run: |
           cd content
@@ -63,5 +63,5 @@ jobs:
           git config --global user.name 'Worker on maco_content_2023_packages'
           git config --global user.email 'your-username@users.noreply.github.com'          
           git add -A 
-          git commit -am "Automated report"
+          git commit -am "Automated content update"
           git push
