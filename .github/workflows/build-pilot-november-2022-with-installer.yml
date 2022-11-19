@@ -72,7 +72,7 @@ jobs:
           cd software-driven
           cd dipf-alea
           cd Alea.Desktop
-          publish -c Release -p:PublishProfile=Properties/PublishProfiles/FolderProfile.win-x64.pubxml
+          dotnet publish -c Release -p:PublishProfile=Properties/PublishProfiles/FolderProfile.win-x64.pubxml
           cd ..
           cd ..
           cd ..                  
