@@ -70,8 +70,7 @@ jobs:
       - name: Copy content
         shell: bash
         run: |               
-         cp -r output/ ./software-driven/dipf-alea/Installer/Content
-         rm -r ./software-driven/dipf-alea/Installer/Content/.git
+         cp -r output/ ./software-driven/dipf-alea/Installer/Content         
       - name: Create installer package
         shell: bash
         run: |                     
