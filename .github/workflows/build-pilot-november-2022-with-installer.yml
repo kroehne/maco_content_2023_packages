@@ -72,14 +72,15 @@ jobs:
         env:
          IB_LICENSE: ${{ secrets.INSTALLER_LICENSE }}
         run: |
+            ls -l
             echo "$IB_LICENSE" > lic.xml
-            ${{ env.INSTALLBUILDER_DIR }}/bin/builder build ./dipf-alea/Installer/AleaDesktop-Pilot.xml windows-x64 \
+            ${{ env.INSTALLBUILDER_DIR }}/bin/builder build ./software-driven/dipf-alea/Installer/AleaDesktop-Pilot.xml windows-x64 \
                 --license lic.xml \
                 --setvars project.outputDirectory=$(pwd) \
                 --setvars project.version=$PUBLIC_VERSION_NUMBER \
                 --setvars project.fullName="AleaDesktop (MSK-OC) -- Pilot November 2022" \
                 --setvars vendor="DIPF / erstellt durch Software Driven UG" 
-            ls -l
+            ls -R
       - name: Upload package artifact
         uses: actions/upload-artifact@v1
         with:
