@@ -29,11 +29,12 @@ jobs:
          mkdir -p output/ 
          cp -r maco_content_2023/materials output/
          mkdir docs
+         mkdir software-driven
          ls -R
       - name: Checkout Alea / Testapp 
         run: |
-          git clone --branch develop https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea.git software-driven
-          git clone --branch develop https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-testapp.git software-driven
+          git clone --branch develop https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea.git software-driven/dipf-alea
+          git clone --branch develop https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-testapp.git software-driven/dipf-testapp
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
