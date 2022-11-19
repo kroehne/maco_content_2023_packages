@@ -68,9 +68,8 @@ jobs:
           cd ..
           cd ..        
       - name: Overwrite content to create installer       
-        run: | 
-         New-Item -ItemType Directory -Force -Path software-driven\dipf-alea\Installer\Content\ 
-         Copy-Item output\* \software-driven\dipf-alea\Installer\Content\ -Exclude @(".git") -Recurse                 
+        run: |          
+         Copy-Item output\* software-driven\dipf-alea\Installer\Content -Exclude @(".git") -Recurse                 
       - name: Create installer package
         shell: bash
         run: |                     
