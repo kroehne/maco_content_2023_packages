@@ -70,10 +70,7 @@ jobs:
       - name: Copy content
         shell: bash
         run: |               
-         cp -r output/ ./software-driven/dipf-alea/Installer/Content         
-      - name: Debug  
-        run: |
-          echo $(pwd)         
+         cp -r output/ ./software-driven/dipf-alea/Installer/Content          
       - name: Create installer package
         shell: bash
         run: |                     
@@ -83,13 +80,8 @@ jobs:
                 --setvars project.version=$PUBLIC_VERSION_NUMBER \
                 --setvars project.fullName="AleaDesktop (MSK-OC) -- Pilot November 2022" \
                 --setvars vendor="DIPF / erstellt durch Software Driven UG" 
-      - name: Debug  
-        run: |
-          ls -R
       - name: Upload package artifact
         uses: actions/upload-artifact@v1
         with:
-          name: AleaDesktopMskOC-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe 
-          path: AleaDesktopMskOC-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe 
-                
-    
+          name: AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe 
+          path: AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe   
