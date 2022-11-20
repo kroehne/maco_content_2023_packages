@@ -67,17 +67,22 @@ jobs:
           cd ..
           cd ..
           cd ..       
-      - name: Checkout Content 
+      - name: Checkout content 
         run: |
           git clone --branch pilot-november-2022 https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea-content.git content          
-      - name: Overwrite content
+      - name: Remove old content
+        continue-on-error: true
         run: |              
          rm -r -fo ./content/ItemPool
          rm -r -fo ./content/materials
          rm -r -fo ./content/Runtime
          rm -r -fo ./content/Studies
-         cp -r output/ ./content/
+      - name: Update content
+        continue-on-error: true
+        run: |              
+         cp -r output/ ./content/        
       - name: Commit and push
+        continue-on-error: true
         run: |
           cd content
           ls -R
