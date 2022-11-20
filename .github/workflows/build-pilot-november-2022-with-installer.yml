@@ -58,6 +58,14 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.0.306     
+      - name: Checkout content 
+        run: |
+          git clone --branch pilot-november-2022 https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea-content.git content               
+      - name: Update content
+        continue-on-error: true
+        run: |                     
+         cp -r content/* .output/
+         rm -r -fo ./output/ItemPool
       - name: Build output  
         run: |
           cd software-driven
@@ -66,10 +74,7 @@ jobs:
           dotnet run --project ./Alea.Prepare.csproj -- -w false -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_preopare_log.txt"
           cd ..
           cd ..
-          cd ..       
-      - name: Checkout content 
-        run: |
-          git clone --branch pilot-november-2022 https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea-content.git content          
+          cd ..            
       - name: Remove old content
         continue-on-error: true
         run: |              
