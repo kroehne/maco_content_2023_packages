@@ -67,7 +67,26 @@ jobs:
           cd ..
           cd ..
           cd ..       
-      - name: Copy content
+      - name: Checkout Content 
+        run: |
+          git clone --branch pilot-november-2022 https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea-content.git content          
+      - name: Overwrite content
+        run: |              
+         rm -r -fo ./content/ItemPool
+         rm -r -fo ./content/materials
+         rm -r -fo ./content/Runtime
+         rm -r -fo ./content/Studies
+         cp -r output/ ./content
+      - name: Commit and push
+        run: |
+          cd content
+          ls -R
+          git config --global user.name 'Worker on maco_content_2023_packages'
+          git config --global user.email 'your-username@users.noreply.github.com'          
+          git add -A 
+          git commit -am "Automated content update"
+          git push          
+      - name: Copy content for installer 
         shell: bash
         run: |               
          cp -r output/ ./software-driven/dipf-alea/Installer/Content          
