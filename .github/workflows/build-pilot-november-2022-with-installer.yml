@@ -76,7 +76,7 @@ jobs:
         run: |                     
             ${{ env.INSTALLBUILDER_DIR }}/bin/builder-cli.exe build ./software-driven/dipf-alea/Installer/AleaDesktop-Pilot.xml windows-x64 \
                 --license lic.xml \
-                --setvars project.outputDirectory=\output\installer \
+                --setvars project.outputDirectory=/generatedinstaller \
                 --setvars project.version=$PUBLIC_VERSION_NUMBER \
                 --setvars project.fullName="AleaDesktop (MSK-OC) -- Pilot November 2022" \
                 --setvars vendor="DIPF / erstellt durch Software Driven UG" 
@@ -87,6 +87,6 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: AleaDesktopMskOC-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe 
-          path: output/installer/AleaDesktopMskOC-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe 
+          path: generatedinstaller/AleaDesktopMskOC-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe 
                 
     
