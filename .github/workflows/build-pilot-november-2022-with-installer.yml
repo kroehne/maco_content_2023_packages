@@ -76,7 +76,7 @@ jobs:
          rm -r -fo ./content/materials
          rm -r -fo ./content/Runtime
          rm -r -fo ./content/Studies
-         cp -r output/ ./content
+         cp -r output/ ./content/
       - name: Commit and push
         run: |
           cd content
