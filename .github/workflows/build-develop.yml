@@ -13,13 +13,13 @@ jobs:
           repository: kroehne/maco_content_2023_runtimes    
           token: ${{ secrets.MACO_CONTENT_CHECKOUT}}  
           path: maco_content_2023_runtimes
-      - name: Checkout content in branch 'main'
+      - name: Checkout content in branch 'develop'
         uses: actions/checkout@v3
         with:
           repository: kroehne/maco_content_2023    
           token: ${{ secrets.MACO_CONTENT_CHECKOUT}}  
           path: maco_content_2023
-          ref: main
+          ref: develop
       - name: Prepare folders
         run: |      
          mkdir -p maco_content_2023/items/cover
@@ -50,10 +50,10 @@ jobs:
           cd ..
           cd .. 
       - name: Create output zip
-        run: zip -r -q docs/main.zip output/       
+        run: zip -r -q docs/develop.zip output/       
       - name: Checkout Content 
         run: |
-          git clone --branch main https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea-content.git content
+          git clone --branch develop https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea-content.git content
       - name: Overwrite content
         run: | 
          rsync -avh output/ content/ --delete --exclude=/.git
