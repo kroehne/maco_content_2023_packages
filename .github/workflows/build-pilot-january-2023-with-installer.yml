@@ -1,0 +1,116 @@
+env:
+    PUBLIC_VERSION_NUMBER: '0.5'
+    PORTABLE_DIR: ${{ github.workspace }}\output\installer
+    INSTALLBUILDER_DIR: ib/app
+    INSTALLBUILDER_URL: https://installbuilder.com/installbuilder-professional-22.10.0-windows-installer.exe
+
+name: Build  'pilot-januar-2023 with Installer'
+on: [workflow_dispatch]  
+jobs:
+  build:
+    runs-on: windows-2019
+    steps:   
+      - name: Install the InstalBuilder
+        shell: bash
+        env:
+         IB_LICENSE: ${{ secrets.IB_LICENSE }}
+        run: |
+            curl -L ${{ env.INSTALLBUILDER_URL }} --output ib.exe
+            ./ib.exe --mode unattended --prefix ${{ env.INSTALLBUILDER_DIR }}
+            ${{ env.INSTALLBUILDER_DIR }}/bin/builder-cli.exe --version
+            echo "$IB_LICENSE" > lic.xml
+            echo "INSTALLER_SRC_PREFIX=$(pwd)" >> $GITHUB_ENV
+            echo "INSTALLER_BIN_PREFIX=$ABSOLUTE_PORTABLE_DIR" >> $GITHUB_ENV            
+      - uses: actions/checkout@v3
+        with:
+           path: maco_content_2023_packages
+      - name: Checkout runtimes
+        uses: actions/checkout@v3
+        with:
+          repository: kroehne/maco_content_2023_runtimes    
+          token: ${{ secrets.MACO_CONTENT_CHECKOUT}}  
+          path: maco_content_2023_runtimes
+      - name: Checkout content in branch 'pilot-january-2023'
+        uses: actions/checkout@v3
+        with:
+          repository: kroehne/maco_content_2023    
+          token: ${{ secrets.MACO_CONTENT_CHECKOUT}}  
+          path: maco_content_2023
+          ref: pilot-january-2023
+      - name: Prepare folders
+        shell: bash
+        run: |      
+         mkdir -p maco_content_2023/items/cover
+         cp maco_content_2023/cover/*.zip maco_content_2023/items/cover   
+         mkdir -p maco_content_2023/runtimes
+         cp -r maco_content_2023_runtimes/9.8.0 maco_content_2023/runtimes
+         mkdir -p output/ 
+         cp -r maco_content_2023/materials output/
+         mkdir docs
+         mkdir software-driven
+         ls -R
+      - name: Checkout Alea / Testapp 
+        shell: bash
+        run: |
+          git clone --branch develop https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea.git software-driven/dipf-alea
+          git clone --branch develop https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-testapp.git software-driven/dipf-testapp
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.306     
+      - name: Checkout content 
+        run: |
+          git clone --branch pilot-january-2023 https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea-content.git content               
+      - name: Update content
+        continue-on-error: true
+        run: |                     
+         cp -r content/* .output/
+         rm -r -fo ./output/ItemPool
+      - name: Build output  
+        run: |
+          cd software-driven
+          cd dipf-alea
+          cd Alea.Prepare
+          dotnet run --project ./Alea.Prepare.csproj -- -w false -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_preopare_log.txt"
+          cd ..
+          cd ..
+          cd ..            
+      - name: Remove old content
+        continue-on-error: true
+        run: |              
+         rm -r -fo ./content/ItemPool
+         rm -r -fo ./content/materials
+         rm -r -fo ./content/Runtime
+         rm -r -fo ./content/Studies
+      - name: Update content
+        continue-on-error: true
+        run: |              
+         cp -r output/* ./content/        
+      - name: Commit and push
+        continue-on-error: true
+        run: |
+          cd content
+          ls -R
+          git config --global user.name 'Worker on maco_content_2023_packages'
+          git config --global user.email 'your-username@users.noreply.github.com'          
+          git add -A 
+          git commit -am "Automated content update"
+          git push          
+      - name: Copy content for installer 
+        shell: bash
+        run: |               
+         cp -r output/ ./software-driven/dipf-alea/Installer/Content          
+      - name: Create installer package
+        shell: bash
+        run: |                     
+            ${{ env.INSTALLBUILDER_DIR }}/bin/builder-cli.exe build ./software-driven/dipf-alea/Installer/AleaDesktop-Pilot.xml windows-x64 \
+                --license lic.xml \
+                --setvars project.outputDirectory=$(pwd) \
+                --setvars project.version=$PUBLIC_VERSION_NUMBER \
+                --setvars project.fullName="AleaDesktop (MSK-OC) -- Pilot Januar 2023" \
+                --setvars vendor="DIPF / erstellt durch Software Driven UG" 
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe 
+          path: AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe   
