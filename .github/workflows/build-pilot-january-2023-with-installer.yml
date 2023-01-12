@@ -85,7 +85,7 @@ jobs:
       - name: Update content
         continue-on-error: true
         run: |              
-         cp -r output/* ./content/        
+         cp -r output/* /content/        
       - name: Commit and push
         continue-on-error: true
         run: |
