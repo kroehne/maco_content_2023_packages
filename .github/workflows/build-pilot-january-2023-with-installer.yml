@@ -64,14 +64,14 @@ jobs:
       - name: Update content
         continue-on-error: true
         run: |                     
-         cp -r content/* .output/*
+         cp -r content/* ./output/
          rm -r -fo ./output/ItemPool
       - name: Build output  
         run: |
           cd software-driven
           cd dipf-alea
           cd Alea.Prepare
-          dotnet run --project ./Alea.Prepare.csproj -- -w false -m true - v HASH -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_prepare_log.txt"
+          dotnet run --project ./Alea.Prepare.csproj -- -w false -m true -v HASH -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_prepare_log.txt"
           cd ..
           cd ..
           cd ..            
@@ -85,7 +85,7 @@ jobs:
       - name: Update content
         continue-on-error: true
         run: |              
-         cp -r output/* /content/        
+         cp -r output/* ./content/        
       - name: Commit and push
         continue-on-error: true
         run: |
