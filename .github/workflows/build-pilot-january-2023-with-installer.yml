@@ -57,7 +57,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 6.0.306     
+          dotnet-version: 7.0.102 
       - name: Checkout content 
         run: |
           git clone --branch pilot-january-2023 https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea-content.git content               
@@ -71,7 +71,7 @@ jobs:
           cd software-driven
           cd dipf-alea
           cd Alea.Prepare
-          dotnet run --project ./Alea.Prepare.csproj -- -w false -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_preopare_log.txt"
+          dotnet run --project ./Alea.Prepare.csproj -- -w false -m true - v "Platzhalter für Hash" -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_preopare_log.txt"
           cd ..
           cd ..
           cd ..            
