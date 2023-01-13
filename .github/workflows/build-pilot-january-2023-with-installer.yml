@@ -71,7 +71,7 @@ jobs:
           cd software-driven
           cd dipf-alea
           cd Alea.Prepare
-          dotnet build --project ./Alea.Prepare.csproj
+          dotnet build ./Alea.Prepare.csproj
           dotnet run --project ./Alea.Prepare.csproj -- -w false -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_prepare_log.txt"
           cd ..
           cd ..
