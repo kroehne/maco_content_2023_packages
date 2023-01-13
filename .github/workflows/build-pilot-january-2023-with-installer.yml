@@ -8,7 +8,7 @@ name: Build  'pilot-januar-2023 with Installer'
 on: [workflow_dispatch]  
 jobs:
   build:
-    runs-on: windows-2019
+    runs-on: windows-latest
     steps:   
       - name: Install the InstalBuilder
         shell: bash
@@ -57,7 +57,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 7.0.102 
+          dotnet-version: 7.0.x
       - name: Checkout content 
         run: |
           git clone --branch pilot-january-2023 https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea-content.git content               
