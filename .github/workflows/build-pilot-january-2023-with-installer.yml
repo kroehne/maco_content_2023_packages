@@ -37,6 +37,12 @@ jobs:
           token: ${{ secrets.MACO_CONTENT_CHECKOUT}}  
           path: maco_content_2023
           ref: pilot-january-2023
+      - name: Declare some variables
+        id: vars
+        shell: bash
+        run: |
+            echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+            echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"          
       - name: Prepare folders
         shell: bash
         run: |      
@@ -72,7 +78,7 @@ jobs:
           cd dipf-alea
           cd Alea.Prepare
           dotnet build ./Alea.Prepare.csproj
-          dotnet run --project ./Alea.Prepare.csproj -- -w false -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_prepare_log.txt"
+          dotnet run --project ./Alea.Prepare.csproj -- -w false -m true -v ${{ steps.vars.outputs.sha_short }} -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_prepare_log.txt"
           cd ..
           cd ..
           cd ..            
