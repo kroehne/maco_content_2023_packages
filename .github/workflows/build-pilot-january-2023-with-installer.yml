@@ -37,11 +37,12 @@ jobs:
           token: ${{ secrets.MACO_CONTENT_CHECKOUT}}  
           path: maco_content_2023
           ref: pilot-january-2023
-      - name: Declare some variables
-        id: vars
-        shell: bash
-        run: |
-            echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"          
+      - name: Navigate to subdirectory
+        run: cd maco_content_2023/
+      - name: Set environment variable
+        run: echo ::set-env name=SHORT_SHA::$(git rev-parse --short=7 $GITHUB_SHA)          
+      - name: Navigate to subdirectory
+        run: cd ../
       - name: Prepare folders
         shell: bash
         run: |      
@@ -74,7 +75,7 @@ jobs:
         continue-on-error: true
         run: |                     
          cp -Recurse -force ./content/* ./output/
-         rm -rf -fo ./output/ItemPool
+         rm -r -fo ./output/ItemPool
          rm -r -fo ./output/.git
       - name: List Content (again)
         shell: bash
@@ -96,10 +97,10 @@ jobs:
       - name: Remove old content
         continue-on-error: true
         run: |              
-         rm -rf -fo ./content/ItemPool
-         rm -rf -fo ./content/materials
-         rm -rf -fo ./content/Runtime
-         rm -rf -fo ./content/Studies
+         rm -r -fo ./content/ItemPool
+         rm -r -fo ./content/materials
+         rm -r -fo ./content/Runtime
+         rm -r -fo ./content/Studies
       - name: Update content
         continue-on-error: true
         run: |              
