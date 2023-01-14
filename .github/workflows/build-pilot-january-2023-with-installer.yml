@@ -10,17 +10,6 @@ jobs:
   build:
     runs-on: windows-latest
     steps:   
-      - name: Install the InstalBuilder
-        shell: bash
-        env:
-         IB_LICENSE: ${{ secrets.IB_LICENSE }}
-        run: |
-            curl -L ${{ env.INSTALLBUILDER_URL }} --output ib.exe
-            ./ib.exe --mode unattended --prefix ${{ env.INSTALLBUILDER_DIR }}
-            ${{ env.INSTALLBUILDER_DIR }}/bin/builder-cli.exe --version
-            echo "$IB_LICENSE" > lic.xml
-            echo "INSTALLER_SRC_PREFIX=$(pwd)" >> $GITHUB_ENV
-            echo "INSTALLER_BIN_PREFIX=$ABSOLUTE_PORTABLE_DIR" >> $GITHUB_ENV            
       - uses: actions/checkout@v3
         with:
            path: maco_content_2023_packages
@@ -36,13 +25,13 @@ jobs:
           repository: kroehne/maco_content_2023    
           token: ${{ secrets.MACO_CONTENT_CHECKOUT}}  
           path: maco_content_2023
-          ref: pilot-january-2023
-      - name: Navigate to subdirectory
-        run: cd maco_content_2023/
-      - name: Set environment variable
-        run: echo ::set-env name=SHORT_SHA::$(git rev-parse --short=7 $GITHUB_SHA)          
-      - name: Navigate to subdirectory
-        run: cd ../
+          ref: pilot-january-2023 
+      - name: Get short hash of content repository 
+        shell: bash
+        run: |         
+         cd maco_content_2023
+         echo ::set-env name=SHORT_SHA::$(git rev-parse --short=7 $GITHUB_SHA)          
+         cd ..
       - name: Prepare folders
         shell: bash
         run: |      
@@ -127,6 +116,17 @@ jobs:
         shell: bash
         run: |      
          ls -R          
+      - name: Install installer tool 'InstalBuilder'
+        shell: bash
+        env:
+         IB_LICENSE: ${{ secrets.IB_LICENSE }}
+        run: |
+            curl -L ${{ env.INSTALLBUILDER_URL }} --output ib.exe
+            ./ib.exe --mode unattended --prefix ${{ env.INSTALLBUILDER_DIR }}
+            ${{ env.INSTALLBUILDER_DIR }}/bin/builder-cli.exe --version
+            echo "$IB_LICENSE" > lic.xml
+            echo "INSTALLER_SRC_PREFIX=$(pwd)" >> $GITHUB_ENV
+            echo "INSTALLER_BIN_PREFIX=$ABSOLUTE_PORTABLE_DIR" >> $GITHUB_ENV                    
       - name: Create installer package
         shell: bash
         run: |                     
