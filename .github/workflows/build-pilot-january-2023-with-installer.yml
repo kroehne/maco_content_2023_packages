@@ -74,7 +74,8 @@ jobs:
         continue-on-error: true
         run: |                     
          cp -Recurse -force ./content/* ./output/
-         rm -r -fo ./output/ItemPool
+         rm -rf -fo ./output/ItemPool
+         rm -r -fo ./output/.git
       - name: List Content (again)
         shell: bash
         run: |      
@@ -84,7 +85,7 @@ jobs:
           cd software-driven
           cd dipf-alea
           cd Alea.Prepare
-          dotnet run --project ./Alea.Prepare.csproj -- -w false -m true -v ${{ steps.vars.outputs.sha_short }} -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_prepare_log.txt"
+          dotnet run --project ./Alea.Prepare.csproj -- -w false -m true -v TESTHASH -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_prepare_log.txt"
           cd ..
           cd ..
           cd ..            
@@ -95,14 +96,14 @@ jobs:
       - name: Remove old content
         continue-on-error: true
         run: |              
-         rm -r -fo ./content/ItemPool
-         rm -r -fo ./content/materials
-         rm -r -fo ./content/Runtime
-         rm -r -fo ./content/Studies
+         rm -rf -fo ./content/ItemPool
+         rm -rf -fo ./content/materials
+         rm -rf -fo ./content/Runtime
+         rm -rf -fo ./content/Studies
       - name: Update content
         continue-on-error: true
         run: |              
-         cp -r output/* ./content/    
+         cp -r -fo output/* ./content/    
       - name: List Content (again)
         shell: bash
         run: |      
