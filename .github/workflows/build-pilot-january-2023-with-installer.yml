@@ -41,7 +41,6 @@ jobs:
         id: vars
         shell: bash
         run: |
-            echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
             echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"          
       - name: Prepare folders
         shell: bash
@@ -66,22 +65,33 @@ jobs:
           dotnet-version: 7.0.x
       - name: Checkout content 
         run: |
-          git clone --branch pilot-january-2023 https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea-content.git content               
+          git clone --branch pilot-january-2023 https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea-content.git content         
+      - name: List Content (again)
+        shell: bash
+        run: |      
+         ls -R
       - name: Update content
         continue-on-error: true
         run: |                     
-         cp -Recurse -force content/* ./output/
+         cp -Recurse -force ./content/* ./output/
          rm -r -fo ./output/ItemPool
+      - name: List Content (again)
+        shell: bash
+        run: |      
+         ls -R         
       - name: Build output  
         run: |
           cd software-driven
           cd dipf-alea
           cd Alea.Prepare
-          dotnet build ./Alea.Prepare.csproj
           dotnet run --project ./Alea.Prepare.csproj -- -w false -m true -v ${{ steps.vars.outputs.sha_short }} -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_prepare_log.txt"
           cd ..
           cd ..
           cd ..            
+      - name: List Content (again)
+        shell: bash
+        run: |      
+         ls -R           
       - name: Remove old content
         continue-on-error: true
         run: |              
@@ -92,7 +102,11 @@ jobs:
       - name: Update content
         continue-on-error: true
         run: |              
-         cp -r output/* ./content/        
+         cp -r output/* ./content/    
+      - name: List Content (again)
+        shell: bash
+        run: |      
+         ls -R          
       - name: Commit and push
         continue-on-error: true
         run: |
@@ -106,7 +120,11 @@ jobs:
       - name: Copy content for installer 
         shell: bash
         run: |               
-         cp -r output/ ./software-driven/dipf-alea/Installer/Content          
+         cp -r output/ ./software-driven/dipf-alea/Installer/Content   
+      - name: List Content (again)
+        shell: bash
+        run: |      
+         ls -R          
       - name: Create installer package
         shell: bash
         run: |                     
