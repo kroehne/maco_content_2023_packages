@@ -1,5 +1,5 @@
 env:
-    PUBLIC_VERSION_NUMBER: '0.5'
+    PUBLIC_VERSION_NUMBER: '1.0'
     PORTABLE_DIR: ${{ github.workspace }}\output\installer
     INSTALLBUILDER_DIR: ib/app
     INSTALLBUILDER_URL: https://installbuilder.com/installbuilder-professional-22.10.0-windows-installer.exe
@@ -30,8 +30,11 @@ jobs:
         shell: bash
         run: |         
          cd maco_content_2023
-         echo "SHORT_SHA=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV   
+         echo "SHORT_SHA_PUBLIC_CONTENT=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV   
          cd ..
+         cd maco_content_2023_runtimes
+         echo "SHORT_SHA_PUBLIC_RUNTIMES=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV   
+         cd ..         
       - name: Prepare folders
         shell: bash
         run: |      
@@ -48,14 +51,25 @@ jobs:
         shell: bash
         run: |
           git clone --branch develop https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea.git software-driven/dipf-alea
+          cd software-driven/dipf-alea
+          echo "SHORT_SHA_ALEA=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV   
+          cd ..         
+          cd ..         
           git clone --branch develop https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-testapp.git software-driven/dipf-testapp
+          cd software-driven/dipf-testapp
+          echo "SHORT_SHA_TESTAPP=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV   
+          cd ..         
+          cd ..         
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 7.0.x
       - name: Checkout content 
         run: |
-          git clone --branch pilot-january-2023 https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea-content.git content         
+          git clone --branch pilot-january-2023 https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea-content.git content   
+          cd content
+          echo "SHORT_SHA_CONTENT=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV   
+          cd ..           
       - name: List Content (again)
         shell: bash
         run: |      
@@ -75,7 +89,7 @@ jobs:
           cd software-driven
           cd dipf-alea
           cd Alea.Prepare
-          dotnet run --project ./Alea.Prepare.csproj -- -w false -m true -v TESTHASH -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_prepare_log.txt"
+          dotnet run --project ./Alea.Prepare.csproj -- -w false -m true -v ${{ env.SHORT_SHA_PUBLIC_CONTENT }} -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_prepare_log.txt"
           cd ..
           cd ..
           cd ..            
@@ -104,18 +118,15 @@ jobs:
           cd content
           ls -R
           git config --global user.name 'Worker on maco_content_2023_packages'
-          git config --global user.email 'your-username@users.noreply.github.com'          
+          git config --global user.email 'u.kroehne@dipf.de'
           git add -A 
-          git commit -am "Automated content update"
+          git commit -am "Automated update using PUBLIC CONTENT ${{ env.SHORT_SHA_PUBLIC_CONTENT }} and PUBLIC RUNTIMES ${{ env.SHORT_SHA_PUBLIC_RUNTIMES }} based on CONTENT ${{ env.SHORT_SHA_CONTENT }} with ALEA ${{ env.SHORT_SHA_ALEA }} and TESTAPP ${{ env.SHORT_SHA_TESTAPP }}"
           git push          
       - name: Copy content for installer 
         shell: bash
         run: |               
          cp -r output/ ./software-driven/dipf-alea/Installer/Content   
-      - name: List Content (again)
-        shell: bash
-        run: |      
-         ls -R          
+7        
       - name: Install installer tool 'InstalBuilder'
         shell: bash
         env:
@@ -139,5 +150,5 @@ jobs:
       - name: Upload package artifact
         uses: actions/upload-artifact@v1
         with:
-          name: AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe 
+          name: AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer-${{ env.SHORT_SHA_PUBLIC_CONTENT }}.exe 
           path: AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe   
