@@ -30,7 +30,7 @@ jobs:
         shell: bash
         run: |         
          cd maco_content_2023
-         echo ::set-env name=SHORT_SHA::$(git rev-parse --short=7 $GITHUB_SHA)          
+         echo "SHORT_SHA=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV   
          cd ..
       - name: Prepare folders
         shell: bash
