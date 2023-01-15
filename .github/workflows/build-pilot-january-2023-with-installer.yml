@@ -46,7 +46,6 @@ jobs:
          cp -r maco_content_2023/materials output/
          mkdir docs
          mkdir software-driven
-         ls -R
       - name: Checkout Alea / Testapp 
         shell: bash
         run: |
@@ -68,22 +67,14 @@ jobs:
         run: |
           git clone --branch pilot-january-2023 https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea-content.git content   
           cd content
-          echo "SHORT_SHA_CONTENT=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV   
+          echo "SHORT_SHA_CONTENT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV   
           cd ..           
-      - name: List Content (again)
-        shell: bash
-        run: |      
-         ls -R
       - name: Update content
         continue-on-error: true
         run: |                     
          cp -Recurse -force ./content/* ./output/
          rm -r -fo ./output/ItemPool
          rm -r -fo ./output/.git
-      - name: List Content (again)
-        shell: bash
-        run: |      
-         ls -R         
       - name: Build output  
         run: |
           cd software-driven
@@ -93,10 +84,6 @@ jobs:
           cd ..
           cd ..
           cd ..            
-      - name: List Content (again)
-        shell: bash
-        run: |      
-         ls -R           
       - name: Remove old content
         continue-on-error: true
         run: |              
@@ -108,15 +95,10 @@ jobs:
         continue-on-error: true
         run: |              
          cp -r -fo output/* ./content/    
-      - name: List Content (again)
-        shell: bash
-        run: |      
-         ls -R          
       - name: Commit and push
         continue-on-error: true
         run: |
           cd content
-          ls -R
           git config --global user.name 'Worker on maco_content_2023_packages'
           git config --global user.email 'u.kroehne@dipf.de'
           git add -A 
