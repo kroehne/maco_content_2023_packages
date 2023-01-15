@@ -26,7 +26,7 @@ jobs:
           token: ${{ secrets.MACO_CONTENT_CHECKOUT}}  
           path: maco_content_2023
           ref: pilot-january-2023 
-      - name: Get short hash of content repository 
+      - name: Get short hash of DIPF content repository 
         shell: bash
         run: |         
          cd maco_content_2023
@@ -66,6 +66,9 @@ jobs:
       - name: Checkout content 
         run: |
           git clone --branch pilot-january-2023 https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea-content.git content   
+      - name: Get short hash of SD content repository 
+        shell: bash
+        run: |               
           cd content
           echo "SHORT_SHA_CONTENT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV   
           cd ..           
