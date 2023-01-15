@@ -30,10 +30,10 @@ jobs:
         shell: bash
         run: |         
          cd maco_content_2023
-         echo "SHORT_SHA_PUBLIC_CONTENT=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV   
+         echo "SHORT_SHA_PUBLIC_CONTENT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV   
          cd ..
          cd maco_content_2023_runtimes
-         echo "SHORT_SHA_PUBLIC_RUNTIMES=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV   
+         echo "SHORT_SHA_PUBLIC_RUNTIMES=$(git rev-parse --short HEAD)" >> $GITHUB_ENV   
          cd ..         
       - name: Prepare folders
         shell: bash
@@ -52,12 +52,12 @@ jobs:
         run: |
           git clone --branch develop https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea.git software-driven/dipf-alea
           cd software-driven/dipf-alea
-          echo "SHORT_SHA_ALEA=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV   
+          echo "SHORT_SHA_ALEA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV   
           cd ..         
           cd ..         
           git clone --branch develop https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-testapp.git software-driven/dipf-testapp
           cd software-driven/dipf-testapp
-          echo "SHORT_SHA_TESTAPP=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV   
+          echo "SHORT_SHA_TESTAPP=$(git rev-parse --short HEAD)" >> $GITHUB_ENV   
           cd ..         
           cd ..         
       - name: Setup .NET
@@ -149,5 +149,5 @@ jobs:
       - name: Upload package artifact
         uses: actions/upload-artifact@v1
         with:
-          name: AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer-.exe 
+          name: AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer-${{ env.SHORT_SHA_PUBLIC_CONTENT }}
           path: AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe   
