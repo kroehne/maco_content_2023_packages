@@ -81,6 +81,7 @@ jobs:
       - name: Restore database
         continue-on-error: true
         run: |              
+         mkdir -p ./content/restore/   
          cp -r -fo ./content/restore/*.json ./software-driven/dipf-alea/Alea.Prepare/data/         
       - name: List Content (Debug)
         shell: bash
@@ -109,7 +110,7 @@ jobs:
          rm -r -fo ./content/alea_prepare_log.txt
       - name: Backup database
         continue-on-error: true
-        run: |              
+        run: |                       
          cp -r -fo ./software-driven/dipf-alea/Alea.Prepare/data/*.json ./content/restore/    
       - name: List Content (Debug)
         shell: bash
