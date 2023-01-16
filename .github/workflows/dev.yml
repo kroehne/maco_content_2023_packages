@@ -78,10 +78,14 @@ jobs:
          cp -Recurse -force ./content/* ./output/
          # rm -r -fo ./output/ItemPool
          rm -r -fo ./output/.git
+      - name: Create restore folder if required 
+        shell: bash
+        continue-on-error: true
+        run: |              
+         mkdir -p ./content/restore/            
       - name: Restore database
         continue-on-error: true
         run: |              
-         mkdir -p ./content/restore/   
          cp -r -fo ./content/restore/*.json ./software-driven/dipf-alea/Alea.Prepare/data/         
       - name: List Content (Debug)
         shell: bash
