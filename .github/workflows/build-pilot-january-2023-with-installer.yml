@@ -4,7 +4,7 @@ env:
     INSTALLBUILDER_DIR: ib/app
     INSTALLBUILDER_URL: https://installbuilder.com/installbuilder-professional-22.10.0-windows-installer.exe
 
-name: Build  'pilot-januar-2023 with Installer'
+name: Build  'pilot-january-2023 with Installer'
 on: [workflow_dispatch]  
 jobs:
   build:
@@ -136,3 +136,12 @@ jobs:
         with:
           name: AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer-${{ env.SHORT_SHA_PUBLIC_CONTENT }}
           path: AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe   
+      - name: Create release          
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "${{ env.PUBLIC_VERSION_NUMBER}}"
+          prerelease: true
+          title: "${{ env.PUBLIC_VERSION_NUMBER}} (${{ env.SHORT_SHA_PUBLIC_CONTENT}})"
+          files: |
+            AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe
