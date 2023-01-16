@@ -76,7 +76,7 @@ jobs:
         continue-on-error: true
         run: |                     
          cp -Recurse -force ./content/* ./output/
-         rm -r -fo ./output/ItemPool
+         # rm -r -fo ./output/ItemPool
          rm -r -fo ./output/.git
       - name: Build output  
         run: |
@@ -97,7 +97,8 @@ jobs:
       - name: Update content
         continue-on-error: true
         run: |              
-         cp -r -fo output/* ./content/    
+         cp -r -fo output/* ./content/   
+         rm -r -fo ./content/alea_prepare_log.txt
       - name: Commit and push
         continue-on-error: true
         run: |
@@ -145,3 +146,4 @@ jobs:
           title: "${{ env.PUBLIC_VERSION_NUMBER}} (${{ env.SHORT_SHA_PUBLIC_CONTENT}})"
           files: |
             AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe
+            output/alea_prepare_log.txt
