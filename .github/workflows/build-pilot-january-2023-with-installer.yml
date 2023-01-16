@@ -137,7 +137,7 @@ jobs:
           name: AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer-${{ env.SHORT_SHA_PUBLIC_CONTENT }}
           path: AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe   
       - name: Create release          
-      - uses: "marvinpinto/action-automatic-releases@latest"
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "${{ env.PUBLIC_VERSION_NUMBER}}"
