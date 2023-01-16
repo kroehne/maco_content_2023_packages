@@ -78,8 +78,12 @@ jobs:
          cp -Recurse -force ./content/* ./output/
          # rm -r -fo ./output/ItemPool
          rm -r -fo ./output/.git
+      - name: List Content (Debug)
+        shell: bash
+        run: |      
+         ls -R         
       - name: Build output  
-        run: |
+        run: | 
           cd software-driven
           cd dipf-alea
           cd Alea.Prepare
@@ -133,17 +137,18 @@ jobs:
                 --setvars project.fullName="AleaDesktop (MSK-OC) -- Pilot Januar 2023" \
                 --setvars vendor="DIPF / erstellt durch Software Driven UG" 
       - name: Upload package artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer-${{ env.SHORT_SHA_PUBLIC_CONTENT }}
-          path: AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe   
+          path: |
+            AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe   
+            output/alea_prepare_log.txt     
       - name: Create release          
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "${{ env.PUBLIC_VERSION_NUMBER}}"
+          automatic_release_tag: "${{ env.PUBLIC_VERSION_NUMBER}}-${{ env.SHORT_SHA_PUBLIC_CONTENT}}"
           prerelease: true          
           title: "${{ env.PUBLIC_VERSION_NUMBER}} (${{ env.SHORT_SHA_PUBLIC_CONTENT}})"
           files: |
-            AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe
-            output/alea_prepare_log.txt
+            AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe            
