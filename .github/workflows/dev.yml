@@ -1,0 +1,97 @@
+env:
+    PUBLIC_VERSION_NUMBER: '1.0'
+    PORTABLE_DIR: ${{ github.workspace }}\output\installer
+    INSTALLBUILDER_DIR: ib/app
+    INSTALLBUILDER_URL: https://installbuilder.com/installbuilder-professional-22.10.0-windows-installer.exe
+
+name: Build  'pilot-january-2023 with Installer: DEV'
+on: [workflow_dispatch]  
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:   
+      - uses: actions/checkout@v3
+        with:
+           path: maco_content_2023_packages
+      - name: Checkout runtimes
+        uses: actions/checkout@v3
+        with:
+          repository: kroehne/maco_content_2023_runtimes    
+          token: ${{ secrets.MACO_CONTENT_CHECKOUT}}  
+          path: maco_content_2023_runtimes
+      - name: Checkout content in branch 'pilot-january-2023'
+        uses: actions/checkout@v3
+        with:
+          repository: kroehne/maco_content_2023    
+          token: ${{ secrets.MACO_CONTENT_CHECKOUT}}  
+          path: maco_content_2023
+          ref: pilot-january-2023 
+      - name: Get short hash of DIPF content repository 
+        shell: bash
+        run: |         
+         cd maco_content_2023
+         echo "SHORT_SHA_PUBLIC_CONTENT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV   
+         cd ..
+         cd maco_content_2023_runtimes
+         echo "SHORT_SHA_PUBLIC_RUNTIMES=$(git rev-parse --short HEAD)" >> $GITHUB_ENV   
+         cd ..         
+      - name: Prepare folders
+        shell: bash
+        run: |      
+         mkdir -p maco_content_2023/items/cover
+         cp maco_content_2023/cover/*.zip maco_content_2023/items/cover   
+         mkdir -p maco_content_2023/runtimes
+         cp -r maco_content_2023_runtimes/9.8.0 maco_content_2023/runtimes
+         mkdir -p output/ 
+         cp -r maco_content_2023/materials output/
+         mkdir docs
+         mkdir software-driven
+      - name: Checkout Alea / Testapp 
+        shell: bash
+        run: |
+          git clone --branch develop https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea.git software-driven/dipf-alea
+          cd software-driven/dipf-alea
+          echo "SHORT_SHA_ALEA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV   
+          cd ..         
+          cd ..         
+          git clone --branch develop https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-testapp.git software-driven/dipf-testapp
+          cd software-driven/dipf-testapp
+          echo "SHORT_SHA_TESTAPP=$(git rev-parse --short HEAD)" >> $GITHUB_ENV   
+          cd ..         
+          cd ..         
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+      - name: Checkout content 
+        run: |
+          git clone --branch pilot-january-2023 https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-alea-content.git content   
+      - name: Get short hash of SD content repository 
+        shell: bash
+        run: |               
+          cd content
+          echo "SHORT_SHA_CONTENT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV   
+          cd ..           
+      - name: Update content
+        continue-on-error: true
+        run: |                     
+         cp -Recurse -force ./content/* ./output/
+         # rm -r -fo ./output/ItemPool
+         rm -r -fo ./output/.git
+      - name: List Content (Debug)
+        shell: bash
+        run: |      
+         ls -R         
+      - name: Build output  
+        run: | 
+          cd software-driven
+          cd dipf-alea
+          cd Alea.Prepare
+          dotnet run --project ./Alea.Prepare.csproj -- -w false -m true -v ${{ env.SHORT_SHA_PUBLIC_CONTENT }} -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_prepare_log.txt"
+          cd ..
+          cd ..
+          cd ..         
+      - name: List Content (Debug)
+        shell: bash
+        run: |      
+         ls -R              
