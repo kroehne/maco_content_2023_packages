@@ -142,6 +142,7 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "${{ env.PUBLIC_VERSION_NUMBER}}"
           prerelease: true
+          draft: true 
           title: "${{ env.PUBLIC_VERSION_NUMBER}} (${{ env.SHORT_SHA_PUBLIC_CONTENT}})"
           files: |
             AleaDesktop-${{ env.PUBLIC_VERSION_NUMBER }}-windows-x64-installer.exe
