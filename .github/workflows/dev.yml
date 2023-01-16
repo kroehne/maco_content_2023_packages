@@ -4,7 +4,7 @@ env:
     INSTALLBUILDER_DIR: ib/app
     INSTALLBUILDER_URL: https://installbuilder.com/installbuilder-professional-22.10.0-windows-installer.exe
 
-name: Build  'pilot-january-2023 with Installer: DEV'
+name: Build  'dev'
 on: [workflow_dispatch]  
 jobs:
   build:
