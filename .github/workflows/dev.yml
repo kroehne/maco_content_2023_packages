@@ -96,7 +96,7 @@ jobs:
           cd software-driven
           cd dipf-alea
           cd Alea.Prepare
-          dotnet run --project ./Alea.Prepare.csproj -- -w false -m true -v ${{ env.SHORT_SHA_PUBLIC_CONTENT }} -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_prepare_log.txt"
+          dotnet run --project ./Alea.Prepare.csproj -- -w false -m false -v ${{ env.SHORT_SHA_PUBLIC_CONTENT }} -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_prepare_log.txt"
           cd ..
           cd ..
           cd ..                 
