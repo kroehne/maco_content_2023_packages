@@ -78,6 +78,15 @@ jobs:
          cp -Recurse -force ./content/* ./output/
          # rm -r -fo ./output/ItemPool
          rm -r -fo ./output/.git
+      - name: Create restore folder if required 
+        shell: bash
+        continue-on-error: true
+        run: |              
+         mkdir -p ./content/restore/            
+      - name: Restore database
+        continue-on-error: true
+        run: |              
+         cp -r -fo ./content/restore/*.json ./software-driven/dipf-alea/Alea.Prepare/data    
       - name: List Content (Debug)
         shell: bash
         run: |      
@@ -87,10 +96,10 @@ jobs:
           cd software-driven
           cd dipf-alea
           cd Alea.Prepare
-          dotnet run --project ./Alea.Prepare.csproj -- -w false -m true -v ${{ env.SHORT_SHA_PUBLIC_CONTENT }} -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_prepare_log.txt"
+          dotnet run --project ./Alea.Prepare.csproj -- -w false -m false -v ${{ env.SHORT_SHA_PUBLIC_CONTENT }} -c ../../../maco_content_2023/codebooks/ -d ../../../output/ -i  ../../../maco_content_2023/items/ -r ../../../maco_content_2023/runtimes/ -s ../../../output/ > "../../../output/alea_prepare_log.txt"
           cd ..
           cd ..
-          cd ..            
+          cd ..                 
       - name: Remove old content
         continue-on-error: true
         run: |              
@@ -103,6 +112,14 @@ jobs:
         run: |              
          cp -r -fo output/* ./content/   
          rm -r -fo ./content/alea_prepare_log.txt
+      - name: Backup database
+        continue-on-error: true
+        run: |                       
+         cp -r -fo ./software-driven/dipf-alea/Alea.Prepare/data/*.json ./content/restore
+      - name: List Content (Debug)
+        shell: bash
+        run: |      
+         ls -R          
       - name: Commit and push
         continue-on-error: true
         run: |
@@ -111,7 +128,7 @@ jobs:
           git config --global user.email 'u.kroehne@dipf.de'
           git add -A 
           git commit -am "Automated update using PUBLIC CONTENT ${{ env.SHORT_SHA_PUBLIC_CONTENT }} and PUBLIC RUNTIMES ${{ env.SHORT_SHA_PUBLIC_RUNTIMES }} based on CONTENT ${{ env.SHORT_SHA_CONTENT }} with ALEA ${{ env.SHORT_SHA_ALEA }} and TESTAPP ${{ env.SHORT_SHA_TESTAPP }}"
-          git push          
+          git push       
       - name: Copy content for installer 
         shell: bash
         run: |               
