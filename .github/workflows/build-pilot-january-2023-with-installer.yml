@@ -2,7 +2,7 @@ env:
     PUBLIC_VERSION_NUMBER: '1.0'
     PORTABLE_DIR: ${{ github.workspace }}\output\installer
     INSTALLBUILDER_DIR: ib/app
-    INSTALLBUILDER_URL: https://installbuilder.com/installbuilder-professional-22.10.0-windows-installer.exe
+    INSTALLBUILDER_URL: https://releases.bitrock.com/installbuilder/installbuilder-professional-22.10.0-windows-installer.exe
 
 name: Build  'pilot-january-2023 with Installer'
 on: [workflow_dispatch]  
