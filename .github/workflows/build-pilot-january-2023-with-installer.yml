@@ -59,6 +59,11 @@ jobs:
           echo "SHORT_SHA_TESTAPP=$(git rev-parse --short HEAD)" >> $GITHUB_ENV   
           cd ..         
           cd ..         
+          git clone --branch develop https://ukroehne:${{ secrets.CHECKINKEYMACO }}@bitbucket.org/software-driven/dipf-maco.git software-driven/dipf-maco
+          cd software-driven/dipf-maco
+          echo "SHORT_SHA_MACO=$(git rev-parse --short HEAD)" >> $GITHUB_ENV   
+          cd ..         
+          cd ..              
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
