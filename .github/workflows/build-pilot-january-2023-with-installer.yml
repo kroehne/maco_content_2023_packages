@@ -132,7 +132,7 @@ jobs:
           git config --global user.name 'Worker on maco_content_2023_packages'
           git config --global user.email 'u.kroehne@dipf.de'
           git add -A 
-          git commit -am "Automated update using PUBLIC CONTENT ${{ env.SHORT_SHA_PUBLIC_CONTENT }} and PUBLIC RUNTIMES ${{ env.SHORT_SHA_PUBLIC_RUNTIMES }} based on CONTENT ${{ env.SHORT_SHA_CONTENT }} with ALEA ${{ env.SHORT_SHA_ALEA }} and TESTAPP ${{ env.SHORT_SHA_TESTAPP }}"
+          git commit -am "Automated update using PUBLIC CONTENT ${{ env.SHORT_SHA_PUBLIC_CONTENT }} and PUBLIC RUNTIMES ${{ env.SHORT_SHA_PUBLIC_RUNTIMES }} based on CONTENT ${{ env.SHORT_SHA_CONTENT }} with ALEA ${{ env.SHORT_SHA_ALEA }} and TESTAPP ${{ env.SHORT_SHA_TESTAPP }} and MACO ${{ env.SHORT_SHA_MACO }}"
           git push       
       - name: Copy content for installer 
         shell: bash
