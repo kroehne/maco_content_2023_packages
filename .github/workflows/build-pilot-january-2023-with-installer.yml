@@ -81,6 +81,7 @@ jobs:
         continue-on-error: true
         run: |                     
          cp -Recurse -force ./content/* ./output/
+	   cp -Recurse -force ./maco_content_2023/materials/* ./output/materials/
          # rm -r -fo ./output/ItemPool
          rm -r -fo ./output/.git
       - name: Create restore folder if required 
